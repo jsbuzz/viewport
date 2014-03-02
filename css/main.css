@@ -1,0 +1,17 @@
+div.viewport {
+	height: 17px;
+	margin-top: 211px;
+	background-color: #ddd;
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;
+	vertical-align: middle;
+	padding: 20px 10px;
+}
+
+div.horz {
+	position: fixed;
+	top: 0px;
+	border-top: 1px solid red;
+	z-index: 999;
+	width: 100%;
+}

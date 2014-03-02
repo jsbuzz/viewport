@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <title>viewport demo</title>
+  <link rel="stylesheet" media="all" href="css/main.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js"></script>
+  <script src="viewport.js"></script>
+  <script>
+  	$(function() {
+  		$('.viewport').viewPort({
+  			'horizon:reach horizon:lock horizon:leave horizon:skip' : function(ev) {
+  				this.innerHTML = ev.type;
+  			},
+  			'top:reach top:lock top:leave top:skip' : function(ev) {
+  				this.innerHTML = ev.type;
+  			},
+
+  			'horizon:reach' : function(ev, horizon) {
+  				if(ev.detail.scrollDirection > 0) {
+  					window.scrollTo(0, ev.detail.top - horizon.offset);
+          } else {
+            window.scrollTo(0, ev.detail.bottom - horizon.offset);
+          }
+  			}
+  		});
+
+  		$('.horz').css({top: document.documentElement.clientHeight/2});
+  	});
+  </script>
+  
+</head>
+<body>
+	<div class="viewport">1</div>
+	<div class="viewport">2</div>
+	<div class="viewport">3</div>
+	<div class="viewport">4</div>
+	<div class="viewport">5</div>
+	<div class="viewport">6</div>
+	<div class="viewport">7</div>
+	<div class="viewport">8</div>
+	<div class="viewport">9</div>
+	<div class="viewport">10</div>
+
+	<div class="horz"></div>
+</body>
+</html>
