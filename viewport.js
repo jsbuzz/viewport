@@ -1,3 +1,23 @@
+// Array dependencies for IE < 9.0
+if(!Array.prototype.forEach) {
+	Array.prototype.forEach = function(callBack) {
+		for (var i = 0; i < this.length; i++) {
+			callBack.call(this[i], this[i], i);
+		}
+	};
+}
+if(!Array.prototype.indexOf) {
+	Array.prototype.indexOf = function(item) {
+		for (var i = 0; i < this.length; i++) {
+			if(this[i] === item) {
+				return i;
+			}
+		}
+		return -1;
+	};
+}
+
+// jQuery plugin
 (function($) {
 
 	var lastScrollTop = 0,
@@ -22,6 +42,7 @@
 			if(!eventHandlers.hasOwnProperty(eventCode)) {
 				continue;
 			}
+			var fn = eventHandlers[eventCode] ;
 			$(this).each(function() {
 				$(this).on(eventCode, eventHandlers[eventCode]);
 				$.viewPort.addElement(this);
@@ -32,18 +53,25 @@
 		return this;
 	};
 
-	$(document).scroll(function(ev) {
-		scrollDirection = window.scrollY > lastScrollTop ? 1 : -1;
-		lastScrollTop = window.scrollY;
+	$(window).scroll(viewPortCheck);
+
+	// initial viewport events - TODO: find a nicer solution than timeout 100...
+	$(function() {
+		window.setTimeout(viewPortCheck, 100);
+	});
+
+	return $.viewPort;
+
+	function viewPortCheck() {
+		scrollDirection = $(window).scrollTop() > lastScrollTop ? 1 : -1;
+		lastScrollTop = $(window).scrollTop();
 
 		$.viewPort.elements.forEach(function(el) {
 			$.viewPort.guideLines.forEach(function(guideLine) {
 				guideLine.check(el);
 			});
-		})
-	});
-
-	return $.viewPort;
+		});
+	}
 
 	function GuideLine(name, position) {
 		this.name = name;
@@ -61,10 +89,11 @@
 				elementBottom = elementTop + el.getBoundingClientRect().height,
 				elementMiddle = elementTop + (elementBottom - elementTop) / 2,
 				offset = parseInt(document.documentElement.clientHeight * this.position),
-				myTop = window.scrollY + offset,
+				myTop = $(window).scrollTop() + offset,
 				lastEvent = el.lastEvent[this.name],
 				event = false;
 
+			// outside the element
 			if(myTop < elementTop || myTop > elementBottom) {
 				if(lastEvent && insideEvents.indexOf(lastEvent.name) >= 0) {
 					event = 'leave';
@@ -74,6 +103,8 @@
 				) {
 					event = 'skip';
 				}
+
+			// inside the element
 			} else {
 				if(scrollDirection === 1) {
 					if(!lastEvent || insideEvents.indexOf(lastEvent.name) < 0) {
@@ -89,6 +120,7 @@
 					}					
 				}
 			}
+
 			if(event) {
 				el.lastEvent[this.name] = {
 					name      : event,
@@ -96,17 +128,16 @@
 				};
 				this.offset = offset;
 				this.y = myTop;
-				$(el).trigger(
-					createEvent(this.name + ':' + event,{
+				var details = {
+						guideLine: this,
 						top: elementTop,
 						middle: elementMiddle,
 						bottom: elementBottom,
 						scrollDirection: scrollDirection
-					}),
-					this
-				);
+				};
+				$(el).trigger(this.name + ':' + event, details);
 			}
-		}
+		};
 	}
 
 	function createEvent(type, offset) {
@@ -122,11 +153,11 @@
 
 	function findElement(el) {
 		for(var i=0; i < this.elements.length; i++) {
-			if(this.elements[i].isSameNode(el)) {
+			if($(this.elements[i]).is(el)) {
 				return i;
 			}
 		}
-		return -1;		
+		return -1;
 	}
 
 	function addElement(el) {
