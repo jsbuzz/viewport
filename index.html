@@ -17,11 +17,11 @@
   				this.innerHTML = ev.type;
   			},
 
-  			'horizon:reach' : function(ev, horizon) {
+  			'horizon:reach' : function(ev, details) {
   				if(ev.detail.scrollDirection > 0) {
-  					window.scrollTo(0, ev.detail.top - horizon.offset);
+  					window.scrollTo(0, details.top - details.guideLine.offset);
           } else {
-            window.scrollTo(0, ev.detail.bottom - horizon.offset);
+            window.scrollTo(0, details.bottom - details.guideLine.offset);
           }
   			}
   		});
