@@ -54,6 +54,7 @@ if(!Array.prototype.indexOf) {
 	};
 
 	$(window).scroll(viewPortCheck);
+	$.viewPort.check = viewPortCheck;
 
 	// initial viewport events - TODO: find a nicer solution than timeout 100...
 	$(function() {
@@ -98,7 +99,7 @@ if(!Array.prototype.indexOf) {
 				if(lastEvent && insideEvents.indexOf(lastEvent.name) >= 0) {
 					event = 'leave';
 				} else if(
-					myTop < elementTop && lastEvent && lastEvent.direction === 1 || 
+					myTop < elementTop && lastEvent && lastEvent.direction === 1 ||
 					myTop > elementBottom && (!lastEvent || lastEvent.direction === -1)
 				) {
 					event = 'skip';
@@ -117,7 +118,7 @@ if(!Array.prototype.indexOf) {
 						event = 'reach';
 					} else if(myTop <= elementMiddle && lastEvent && lastEvent.name === 'reach' && lastEvent.direction === -1) {
 						event = 'lock';
-					}					
+					}
 				}
 			}
 
@@ -142,7 +143,7 @@ if(!Array.prototype.indexOf) {
 
 	function createEvent(type, offset) {
 		return new CustomEvent(
-			type, 
+			type,
 			{
 				detail: offset,
 				bubbles: true,
