@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+  <!-- In production, only one script (pdf.js) is necessary -->
+  <!-- In production, change the content of PDFJS.workerSrc below -->
+
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="pdf.js"></script>
+  <script src="../viewport.min.js"></script>
+  <script src="scroll.js"></script>
+
+  <style>
+    #pdf-wrapper {
+      width: 614px;
+      position: absolute;
+      left: 50%;
+      margin-left: -307px;
+    }
+
+    #pdf-wrapper canvas.pdf {
+      display: block;
+      margin-top: 10px;
+      border:1px solid black;
+    }
+
+
+    #pdf-wrapper .page-info {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="pdf-wrapper">
+  </div>
+</body>
+
+</html>
