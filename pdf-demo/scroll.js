@@ -10,7 +10,7 @@
 //
 // Fetch the PDF document from the URL using promises
 //
-var promise = PDFJS.getDocument('//localhost/examples/helloworld/test.pdf').then(function(pdf) {
+var promise = PDFJS.getDocument('test.pdf').then(function(pdf) {
   // Using promise to fetch the page
   var currentPage = 1;
   var maxPages = pdf.pdfInfo.numPages;
